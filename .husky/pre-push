@@ -1,0 +1,29 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+# Comprobar la sincronización con la rama develop
+echo "🔍 Comprobando sincronización con la rama develop..."
+git fetch origin > /dev/null 2>&1
+BEHIND=$(git rev-list --count HEAD..origin/develop 2>/dev/null || echo "0")
+if [ "$BEHIND" -gt 0 ]; then
+    echo "⚠️ Tu rama está $BEHIND commits detrás de 'develop'."
+    echo "💡 Es recomendable sincronizar y resolver posibles conflictos antes de hacer push."
+    echo "💻 Ejecuta: git pull origin develop"
+    read -p "Continuar de todos modos? (y/N): " -n 1 -r
+    echo
+    if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+        exit 1
+    fi
+fi
+echo "✅ Rama sincronizada"
+
+# Ejecutar todas las pruebas del backend
+echo "🔍 Ejecutando pruebas del backend..."
+cd backend
+if mvn test; then
+    echo "✅ Todas las pruebas del backend pasaron con éxito"
+    exit 0
+else
+    echo "❌ Las pruebas del backend fallaron - Push bloqueado"
+    exit 1
+fi

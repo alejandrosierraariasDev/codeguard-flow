@@ -1,4 +1,4 @@
-const mi_contrasena = '123'; // Esto debería fallar
+const mi_contrasena = 'password123'; // Esto debería fallar
 
 const saludar = (nombre: string) => {
     // Un comentario de código que queremos detectar

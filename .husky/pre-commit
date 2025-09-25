@@ -1,0 +1,54 @@
+# Comprobar si hay datos sensibles...
+echo "🔍 Comprobando datos sensibles..."
+SENSITIVE_PATTERNS="(password|passwd|pass|pwd|secret|token|key|api_key|private_key|auth_token|auth|bearer|basic_auth|credentials|client_secret|access_token|refresh_token|jwt|cookie|session)"
+SENSITIVE_FILES=$(git diff --cached --name-only | grep -v -E '^.husky/|^eslint.config.|.env.example$' | xargs grep -l -i -E "$SENSITIVE_PATTERNS" 2>/dev/null || true)
+
+if [ -n "$SENSITIVE_FILES" ]; then
+    echo "❌ ALERTA: Posibles datos sensibles detectados en:"
+    echo "$SENSITIVE_FILES"
+    echo "🚫 Commit cancelado"
+    exit 1
+fi
+echo "✅ No hay datos sensibles detectados"
+
+# Detección de código comentado
+echo "🔍 Comprobando código comentado..."
+COMMENT_FILES=$(git diff --cached --name-only | grep -E '\.(ts|tsx|js|jsx)$')
+if [ -n "$COMMENT_FILES" ]; then
+    COMMENTED_CODE=$(echo "$COMMENT_FILES" | xargs awk '
+    {
+        if ($0 ~ /^\s*\/\//) {
+            print FILENAME":"NR":"$0" -> Posible comentario de código"
+        }
+    }' 2>/dev/null)
+    if [ -n "$COMMENTED_CODE" ]; then
+        echo "⚠️ Código comentado detectado:"
+        echo "$COMMENTED_CODE" | head -5
+        echo "💡 Recomendación: Por favor, elimina el código innecesario. Si es temporal, usa // TODO: o // FIXME:"
+        exit 1
+    fi
+fi
+echo "✅ No se detectó código comentado problemático"
+
+# Ejecutar lint-staged (ESLint + Prettier en archivos modificados)
+echo "🔍 Comprobando archivos de frontend..."
+cd frontend
+if npx lint-staged; then
+    echo "✅ Archivos de frontend formateados y sin errores de linting"
+else
+    echo "❌ Fallo en el linting o formato - Commit bloqueado"
+    exit 1
+fi
+cd ..
+
+# Validación de tipos de TypeScript
+echo "🔍 Comprobando errores de tipado en TypeScript..."
+if cd frontend && npx tsc --noEmit; then
+    echo "✅ No se encontraron errores de tipado en TypeScript"
+else
+    echo "❌ Errores de tipado de TypeScript - Commit bloqueado"
+    exit 1
+fi
+
+echo "✅ Verificaciones de pre-commit completadas con éxito"
+exit 0
