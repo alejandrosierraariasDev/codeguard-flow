@@ -1,97 +1,93 @@
-# 🚀 Husky Validation: Monorepo PoC para la Calidad de Código
+# 🚀 Husky Validation: Monorepo PoC for Code Quality
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![TypeScript](https://img.shields.io/badge/TypeScript-4.9.5-blue.svg)](https://www.typescriptlang.org/)
 [![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.2.0-brightgreen.svg)](https://spring.io/projects/spring-boot)
 [![Husky](https://img.shields.io/badge/Husky-9.1.7-ff69b4.svg)](https://typicode.github.io/husky/)
 
-## 🎯 Visión General del Proyecto
+## 🎯 Project Overview
 
-Este proyecto es una Prueba de Concepto (PoC) que demuestra la implementación de un robusto flujo de trabajo de validación de código utilizando Git hooks en una estructura de monorepo. El objetivo es asegurar que solo el código de alta calidad, seguro y estable, sea subido al repositorio central, protegiendo así la integridad de la base de código.
+This project is a Proof of Concept (PoC) that demonstrates the implementation of a robust code validation workflow using Git hooks in a monorepo structure. The goal is to ensure that only high-quality, secure, and stable code is pushed to the central repository, thus protecting the integrity of the codebase.
 
-### Características Principales
+### Key Features
 
-- **Validación Automática de Código**: Ejecución automática de pruebas y verificaciones en cada commit y push
-- **Monitoreo de Seguridad**: Detección de datos sensibles y credenciales expuestas
-- **Formato Consistente**: Aplicación automática de estándares de codificación
-- **Tipado Estricto**: Uso de TypeScript para mayor seguridad en el desarrollo
-- **Pruebas Automatizadas**: Integración con JUnit para pruebas de backend
+- **Automatic Code Validation**: Automatic execution of tests and verifications on each commit and push
+- **Security Monitoring**: Detection of sensitive data and exposed credentials
+- **Consistent Formatting**: Automatic application of coding standards
+- **Strict Typing**: Use of TypeScript for enhanced development security
+- **Automated Testing**: Integration with JUnit for backend testing
 
-## 🏗️ Estructura del Proyecto
+## 🏗️ Project Structure
 
 ```
 husky-validation/
-├── .husky/               # Configuración de hooks de Git
-│   ├── pre-commit       # Validaciones antes del commit
-│   └── pre-push         # Validaciones antes del push
-├── backend/             # Código fuente del backend (Java/Spring Boot)
+├── .husky/               # Git hooks configuration
+│   ├── pre-commit       # Pre-commit validations
+│   └── pre-push         # Pre-push validations
+├── backend/             # Backend source code (Java/Spring Boot)
 │   ├── src/
 │   └── pom.xml
-├── frontend/            # Código fuente del frontend (TypeScript/React)
+├── frontend/            # Frontend source code (TypeScript/React)
 │   ├── src/
 │   └── tsconfig.json
 ├── .gitignore
-└── package.json         # Configuración de Node.js y scripts
+└── package.json         # Node.js configuration and scripts
 ```
 
-## 🛠️ Configuración e Instalación
+## 🛠️ Setup and Installation
 
-### Requisitos Previos
+### Prerequisites
 
-- Node.js 16+ y npm 8+
+- Node.js 16+ and npm 8+
 - Java 17+
 - Maven 3.6+
 - Git 2.25+
 
-
-
-
-### 1. Instalar Dependencias del Frontend
+### 1. Install Frontend Dependencies
 
 ```
 npm install
 ```
 
-### 2. Configurar el Backend (Java/Spring Boot)
+### 2. Configure Backend (Java/Spring Boot)
 
-Asegúrate de que tu directorio backend contenga el archivo `pom.xml` con las dependencias necesarias.
+Make sure your backend directory contains the `pom.xml` file with the necessary dependencies.
 
-## 🔒 Flujo de Validaciones Automatizadas
+## 🔒 Automated Validation Flow
 
-### 1. Hook `pre-commit`
+### 1. `pre-commit` Hook
 
-Se ejecuta automáticamente antes de cada `git commit` para validaciones rápidas:
+Automatically executed before each `git commit` for quick validations:
 
-- 🔍 **Detección de Datos Sensibles**: Bloquea el commit si encuentra patrones de credenciales
-- 📝 **Código Comentado**: Advierte sobre código comentado innecesario
-- 🧹 **Linting y Formateo**: Ejecuta ESLint y Prettier en archivos modificados
-- ✅ **Validación de Tipado**: Verifica que el código TypeScript no tenga errores
+- 🔍 **Sensitive Data Detection**: Blocks commit if credential patterns are found
+- 📝 **Commented Code**: Warns about unnecessary commented code
+- 🧹 **Linting and Formatting**: Runs ESLint and Prettier on modified files
+- ✅ **Type Validation**: Verifies TypeScript code has no errors
 
-### 2. Hook `pre-push`
+### 2. `pre-push` Hook
 
-Se ejecuta antes de cada `git push` para validaciones más exhaustivas:
+Executed before each `git push` for more comprehensive validations:
 
-- 🔄 **Sincronización de Rama**: Verifica que estés al día con `develop`
-- 🧪 **Pruebas Unitarias**: Ejecuta `mvn test` para validar el backend
+- 🔄 **Branch Synchronization**: Verifies you're up to date with `develop`
+- 🧪 **Unit Tests**: Runs `mvn test` to validate the backend
 
-## 💡 Guía de Buenas Prácticas
+## 💡 Best Practices Guide
 
-### Principios de Desarrollo
+### Development Principles
 
-- **DRY (Don't Repeat Yourself)**: Evita la duplicación de código
-- **KISS (Keep It Simple, Stupid)**: Mantén el código simple y legible
-- **YAGNI (You Aren't Gonna Need It)**: No implementes funcionalidades innecesarias
-- **SOLID**: Sigue los principios de diseño orientado a objetos
+- **DRY (Don't Repeat Yourself)**: Avoid code duplication
+- **KISS (Keep It Simple, Stupid)**: Keep code simple and readable
+- **YAGNI (You Aren't Gonna Need It)**: Don't implement unnecessary features
+- **SOLID**: Follow object-oriented design principles
 
-### Estándares de Código
+### Code Standards
 
-- **TypeScript**: Usa tipado estricto y evita `any`
-- **Java**: Sigue las convenciones de código de Spring Boot
-- **Commits**: Usa mensajes descriptivos siguiendo [Conventional Commits](https://www.conventionalcommits.org/)
+- **TypeScript**: Use strict typing and avoid `any`
+- **Java**: Follow Spring Boot code conventions
+- **Commits**: Use descriptive messages following [Conventional Commits](https://www.conventionalcommits.org/)
 
-### Pruebas
+### Testing
 
-- **Frontend**: Tests unitarios con Jest y React Testing Library
-- **Backend**: Pruebas unitarias con JUnit 5 y MockMvc
-- **Cobertura**: Objetivo mínimo del 80% de cobertura de código
-
+- **Frontend**: Unit tests with Jest and React Testing Library
+- **Backend**: Unit tests with JUnit 5 and MockMvc
+- **Coverage**: Minimum target of 80% code coverage
